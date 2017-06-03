@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hong.mapper.BoardMapper">
+
+	<insert id="create">
+		insert into tbl_board (bno, title, content, writer)
+		values(seq_board_bno.nextval, #{title},#{content}, #{writer})
+
+		<!-- Insert후 seq번호를 가져오기 <selectKey keyProperty="idx" resultType="Integer" 
+			order="AFTER"> SELECT seq_board_bno.currval FROM dual </selectKey> -->
+	</insert>
+
+	<!-- TypeAliases를 통해 패키지 네임 생략가능 -->
+	<select id="read" resultType="BoardVO">
+		select
+		bno, title, content, writer,
+		regdate, viewcnt
+		from
+		tbl_board
+		where
+		bno = #{bno}
+	</select>
+
+	<update id="update">
+		update tbl_board set title =#{title}, content
+		=#{content}
+		where bno = #{bno}
+	</update>
+
+	<delete id="delete">
+		delete from tbl_board where bno = #{bno}
+	</delete>
+
+	<select id="listAll" resultType="com.hong.domain.BoardVO">
+ <![CDATA[
+ select 
+   bno, title, content, writer, regdate, viewcnt 
+ from 
+   tbl_board 
+ where bno > 0 
+ order by bno desc, regdate desc
+ ]]>
+	</select>
+
+	<select id="listPage" resultType="BoardVO">
+	<![CDATA[
+	select x.rnum, x.* from(
+  		select rownum as rnum, a.* from(
+    		select * from tbl_board order by bno desc, REGDATE desc) a
+  		where rownum <= #{page}+9) x
+	where x.rnum >=#{page}
+	]]>
+	</select>
+	
+	<select id="listCriteria" resultType="BoardVO">
+	<![CDATA[
+	select x.rnum, x.* from(
+  		select rownum as rnum, a.* from(
+    		select * from tbl_board order by bno desc, REGDATE desc) a
+  		where rownum <= #{pageStart}+#{perPageNum}-1) x
+	where x.rnum >=#{pageStart}
+	]]>
+	</select>
+	
+	<select id="countPaging" resultType="int">
+	<![CDATA[
+	select x.rnum, x.* from(
+  		select rownum as rnum, a.* from(
+    		select * from tbl_board order by bno desc, REGDATE desc) a
+  		where rownum <= #{pageStart}+#{perPageNum}-1) x
+	where x.rnum >=#{pageStart}
+	]]>
+	</select>
+	
+	<!-- 동적 SQL문 작성 -->
+	<select id="listSearch" resultType="BoardVO">
+	<![CDATA[
+	select * from tbl_board
+	where bno > 0
+	order by bno desc
+	limit 
+	]]>
+	</select>
+	
+	<select id="listSearchCount" resultType="int">
+	<![CDATA[
+	select count(bno) from tbl_board
+	where bno > 0
+	]]>
+	</select>
+
+</mapper>
