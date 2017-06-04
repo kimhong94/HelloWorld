@@ -31,7 +31,6 @@ public class BoardDAOTest {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BoardDAOTest.class);
 	
-	//TODO 시퀀스값 넣기
 	@Test
 	public void testCreate() throws Exception {
 		BoardVO bvo = new BoardVO();
@@ -110,12 +109,15 @@ public class BoardDAOTest {
 		logger.info(uricomponents.toString());
 	}
 	
+	/*
+	 * MyBatis + 오라클에서의 like처리는  like '%'||#{keyword}||'%' 형태 
+	 */
 	@Test
 	public void testDynamicSqlUsingBasicSql() throws Exception {
 		SearchCriteria cri = new SearchCriteria();
 		cri.setPage(1);
-		cri.setKeyword("글");
-		cri.setSearchType("t");
+		cri.setKeyword("한샘");
+		cri.setSearchType("tcw");
 		
 		logger.info("================");
 		

@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where x.rnum >=#{page}
 	]]>
 	</select>
-	
+
 	<select id="listCriteria" resultType="BoardVO">
 	<![CDATA[
 	select x.rnum, x.* from(
@@ -64,27 +64,62 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where x.rnum >=#{pageStart}
 	]]>
 	</select>
-	
+
 	<select id="countPaging" resultType="int">
-	<![CDATA[
-	select x.rnum, x.* from(
-  		select rownum as rnum, a.* from(
-    		select * from tbl_board order by bno desc, REGDATE desc) a
-  		where rownum <= #{pageStart}+#{perPageNum}-1) x
-	where x.rnum >=#{pageStart}
-	]]>
+ 		<![CDATA[
+ 		select 
+   		count(bno) 
+		from tbl_board 
+		where bno > 0 
+		 ]]>
 	</select>
-	
+
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and title like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and content like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and writer like '%'||#{keyword}||'%'
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and ( title like '%'||#{keyword}||'%' OR content like
+				'%'||#{keyword}||'%')
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				and ( content like '%'||#{keyword}||'%' OR writer like
+				'%'||#{keyword}||'%')
+			</if>
+			<if test="searchType == 'tcw'.toString()">
+				and ( title like '%'||#{keyword}||'%'
+				OR
+				content like '%'||#{keyword}||'%'
+				OR
+				writer like '%'||#{keyword}||'%')
+			</if>
+		</if>
+	</sql>
+
 	<!-- 동적 SQL문 작성 -->
 	<select id="listSearch" resultType="BoardVO">
 	<![CDATA[
-	select * from tbl_board
-	where bno > 0
-	order by bno desc
-	limit 
+	select x.rnum, x.* from(
+  		select rownum as rnum, a.* from(
+    		select * from tbl_board where bno > 0 
+    ]]>
+
+		<include refid="search"></include>
+  
+    <![CDATA[
+		order by bno desc, REGDATE desc) a
+		where rownum <= #{pageStart}+#{perPageNum}-1) x
+		where x.rnum >=#{pageStart}
 	]]>
 	</select>
-	
+
 	<select id="listSearchCount" resultType="int">
 	<![CDATA[
 	select count(bno) from tbl_board
