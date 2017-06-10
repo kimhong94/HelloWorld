@@ -16,14 +16,14 @@ public interface BoardDAO {
 	public List<BoardVO> listPage(Integer page) throws Exception;
 	public List<BoardVO> listCriteria(Criteria cri) throws Exception;
 	public int countPaging(Criteria cri) throws Exception;
-	
 	/**
 	 * 2017년 6월 3일
 	 * 동적 SQL문 작성을 위한 메소드 설정 
-	 * @param cri
-	 * @return
-	 * @throws Exception
 	 */
 	public List<BoardVO> listSearch(SearchCriteria cri) throws Exception;
 	public int listSearchCount(SearchCriteria cri) throws Exception;
+	
+	public void updateReplyCnt(Integer bno, int amount) throws Exception;
+	public void updateViewCnt(Integer bno) throws Exception;
+	
 }

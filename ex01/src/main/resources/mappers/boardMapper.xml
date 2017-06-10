@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="read" resultType="BoardVO">
 		select
 		bno, title, content, writer,
-		regdate, viewcnt
+		regdate, viewcnt, replycnt
 		from
 		tbl_board
 		where
@@ -126,5 +126,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where bno > 0
 	]]>
 	</select>
-
+	
+	<update id="updateReplyCnt">
+		update tbl_board set replycnt = replycnt + #{amount} where bno = #{bno}
+	</update>
+	
+	<update id="updateViewCnt">
+		update tbl_board set viewcnt = viewcnt + 1 where bno = #{bno}
+	</update>
+	
 </mapper>

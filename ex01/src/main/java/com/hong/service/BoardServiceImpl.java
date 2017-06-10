@@ -5,6 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hong.domain.BoardVO;
 import com.hong.domain.Criteria;
@@ -15,56 +17,58 @@ import com.hong.persistence.BoardDAO;
 public class BoardServiceImpl implements BoardService {
 
 	@Inject
-	private BoardDAO dao;
+	private BoardDAO boardDAO;
 	
 	@Override
 	public void regist(BoardVO bvo) throws Exception {
-		dao.create(bvo);
+		boardDAO.create(bvo);
 	}
 
+	@Transactional(isolation=Isolation.READ_COMMITTED)
 	@Override
 	public BoardVO read(Integer bno) throws Exception {
-		return dao.read(bno);
+		boardDAO.updateViewCnt(bno);
+		return boardDAO.read(bno);
 	}
 
 	@Override
 	public void modify(BoardVO bvo) throws Exception {
-		dao.update(bvo);
+		boardDAO.update(bvo);
 	}
 
 	@Override
 	public void remove(Integer bno) throws Exception {
-		dao.delete(bno);
+		boardDAO.delete(bno);
 	}
 
 	@Override
 	public List<BoardVO> listAll() throws Exception {
-		return dao.listAll();
+		return boardDAO.listAll();
 	}
 
 	@Override
 	public List<BoardVO> listPage(Integer page) throws Exception {
-		return dao.listPage(page);
+		return boardDAO.listPage(page);
 	}
 
 	@Override
 	public List<BoardVO> listCriteria(Criteria cri) throws Exception {
-		return dao.listCriteria(cri);
+		return boardDAO.listCriteria(cri);
 	}
 
 	@Override
 	public int listCountCriteria(Criteria cri) throws Exception {
-		return dao.countPaging(cri);
+		return boardDAO.countPaging(cri);
 	}
 
 	@Override
 	public List<BoardVO> listSearchCriteria(SearchCriteria cri) throws Exception {
-		return dao.listSearch(cri);
+		return boardDAO.listSearch(cri);
 	}
 
 	@Override
 	public int listSearchCount(SearchCriteria cri) throws Exception {
-		return dao.listSearchCount(cri);
+		return boardDAO.listSearchCount(cri);
 	}
 
 }

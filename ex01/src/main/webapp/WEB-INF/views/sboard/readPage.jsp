@@ -76,7 +76,7 @@
 						<ul class="timeline">
 							<!-- timeline time label -->
 							<li class="time-label" id="repliesDiv"><span
-								class="bg-green"> Replies List </span></li>
+								class="bg-green"> Replies List<small id='replycntSmall'>[${boardVO.replycnt}]</small> </span></li>
 						</ul>
 
 						<div class='text-center'>
@@ -174,7 +174,9 @@
 		$.getJSON(pageInfo, function(data) {
 			printData(data.list, $("#repliesDiv"), $('#template'));
 			printPaging(data.pagemarker, $(".pagination"));
+			
 			$("#modifyModal").modal('hide');
+			$("#replycntSmall").html("["+data.pagemarker.totalCount+"]");
 		});
 	}
 
@@ -313,7 +315,7 @@ $(document).ready(function(){
 	});
 	
 	$("#removeBtn").on("click", function(){
-		formObj.attr("action", "/sboard/removePage");
+		formObj.attr("action", "/sboardPage");
 		formObj.submit();
 	});
 	
