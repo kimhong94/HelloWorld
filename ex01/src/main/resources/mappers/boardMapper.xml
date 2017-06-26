@@ -135,4 +135,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update tbl_board set viewcnt = viewcnt + 1 where bno = #{bno}
 	</update>
 	
+	<insert id="addAttach">
+		insert into tbl_attach(fullname, bno) values(#{fullName}, seq_board_bno.currval)
+	</insert>
+	
+	<!-- 여러개의 결과는 리스트 형태로 반환 -->
+	<select id="getAttach" resultType="string">
+		select fullName from tbl_attach where bno = #{bno} order by regdate
+	</select>
+	
+	<delete id="deleteAttach">
+		delete from tbl_attach where bno = #{bno}
+	</delete>
+	<insert id="replaceAttach">
+		insert into tbl_attach(fullname, bno) values (#{fullName}, #{bno})
+	</insert>
 </mapper>

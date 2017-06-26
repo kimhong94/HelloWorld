@@ -1,5 +1,7 @@
 package com.hong.test;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -122,5 +124,19 @@ public class BoardDAOTest {
 		logger.info("================");
 		
 		List<BoardVO> bvo = dao.listSearch(cri);
+	}
+	
+	@Test
+	public void testInsertAttach_And_checkOracleSequenceCurrval() throws Exception {
+		BoardVO bvo = new BoardVO();
+		bvo.setContent("TestAttachTransaction");
+		bvo.setTitle("TestAttach");
+		bvo.setWriter("TestAttachUser");
+		
+		// 파일 이름은 primary key이다.
+		String files[] = {"TestPath2"};
+		bvo.setFiles(files);
+		
+		bs.regist(bvo);
 	}
 }
