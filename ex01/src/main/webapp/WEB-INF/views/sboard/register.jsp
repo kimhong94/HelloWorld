@@ -37,7 +37,7 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputEmail1">Writer</label> <input type="text"
-								name="writer" class="form-control" placeholder="Enter Writer">
+								name="writer" class="form-control" value="${login.userid}" readonly>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputEmail1">File DROP Here</label>
@@ -138,5 +138,7 @@ $("#registerForm").submit(function(event){
 });
 
 </script>
+
+
 
 <%@include file="../include/footer.jsp"%>
